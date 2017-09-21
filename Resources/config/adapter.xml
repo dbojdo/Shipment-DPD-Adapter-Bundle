@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="webit_shipment_dpd_adapter.adapter" class="Webit\Shipment\DpdAdapter\ShipmentDpdAdapter">
+            <argument type="service" id="webit_shipment_dpd_adapter.vendor_factory" />
+            <argument type="service" id="webit_shipment_dpd_adapter.tracking_url_provider" />
+            <argument type="service" id="webit_shipment_dpd_adapter.open_umlf_mapper" />
+            <argument type="service" id="webit_shipment_dpd_adapter.dpd_client" />
+            <argument type="string">%webit_shipment_dpd_adapter.auth.fid%</argument>
+            <argument type="string">%webit_shipment_dpd_adapter.default_language%</argument>
+
+            <tag name="webit_shipment.vendor_adapter" vendor="dpd" />
+        </service>
+
+        <service id="webit_shipment_dpd_adapter.vendor_factory" class="Webit\Shipment\DpdAdapter\Vendor\VendorFactory">
+            <argument>%webit_shipment_dpd_adapter.vendor_class%</argument>
+        </service>
+
+        <service id="webit_shipment_dpd_adapter.open_umlf_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\OpenUMLFMapper" public="false">
+            <argument type="service" id="webit_shipment_dpd_adapter.package_mapper" />
+        </service>
+
+        <service id="webit_shipment_dpd_adapter.package_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\PackageMapper" public="false">
+            <argument type="service" id="webit_shipment_dpd_adapter.receiver_mapper" />
+            <argument type="service" id="webit_shipment_dpd_adapter.sender_mapper" />
+            <argument type="service" id="webit_shipment_dpd_adapter.parcel_mapper" />
+            <argument type="service" id="webit_shipment_dpd_adapter.services_mapper" />
+            <argument type="service" id="webit_shipment.default_sender_address_provider" />
+        </service>
+
+        <service id="webit_shipment_dpd_adapter.receiver_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\ReceiverMapper" public="false" />
+
+        <service id="webit_shipment_dpd_adapter.sender_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\SenderMapper" public="false">
+            <argument type="string">%webit_shipment_dpd_adapter.auth.fid%</argument>
+        </service>
+
+        <service id="webit_shipment_dpd_adapter.parcel_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\ParcelMapper" public="false" />
+
+        <service id="webit_shipment_dpd_adapter.services_mapper" class="\Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\ServicesMapper" public="false">
+            <argument type="string">%webit_shipment_dpd_adapter.default_currency%</argument>
+        </service>
+
+        <service id="webit_shipment_dpd_adapter.tracking_url_provider" alias="webit_shipment_dpd_adapter.tracking_url_provider.by_country" />
+        <service id="webit_shipment_dpd_adapter.tracking_url_provider.by_country" class="Webit\Shipment\DpdAdapter\Tracking\ByCountryTrackingUrlProvider" public="false">
+            <argument type="collection">
+                <argument key="PL" type="service" id="webit_shipment_dpd_adapter.tracking_url_provider.pl" />
+            </argument>
+        </service>
+
+        <service id="webit_shipment_dpd_adapter.tracking_url_provider.pl" class="Webit\Shipment\DpdAdapter\Tracking\PlTrackingUrlProvider" />
+
+        <service id="webit_shipment_dpd_adapter.dpd_client_factory" class="Webit\DPDClient\Client\ClientFactory" />
+        <service id="webit_shipment_dpd_adapter.dpd_client" class="Webit\DPDClient\Client">
+            <factory service="webit_shipment_dpd_adapter.dpd_client_factory" method="create" />
+            <argument type="service">
+                <service class="Webit\DPDClient\Common\AuthDataV1">
+                    <argument type="string">%webit_shipment_dpd_adapter.auth.login%</argument>
+                    <argument type="string">%webit_shipment_dpd_adapter.auth.password%</argument>
+                    <argument type="string">%webit_shipment_dpd_adapter.auth.fid%</argument>
+                </service>
+            </argument>
+        </service>
+    </services>
+</container>
