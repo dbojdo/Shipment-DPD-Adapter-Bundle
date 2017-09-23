@@ -28,9 +28,10 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('fid')->end()
                     ->end()
                 ->end()
+                ->booleanNode('test_mode')->defaultFalse()->end()
                 ->scalarNode('default_language')->defaultValue('PL')->cannotBeEmpty()->end()
                 ->scalarNode('default_currency')->defaultValue('PLN')->cannotBeEmpty()->end()
-                ->scalarNode('vendor_class')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('vendor_class')->defaultValue('Webit\Shipment\Vendor\Vendor')->cannotBeEmpty()->end()
             ->end();
 
         return $treeBuilder;

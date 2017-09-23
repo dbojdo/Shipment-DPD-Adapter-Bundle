@@ -39,7 +39,7 @@
 
         <service id="webit_shipment_dpd_adapter.parcel_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\ParcelMapper" public="false" />
 
-        <service id="webit_shipment_dpd_adapter.services_mapper" class="\Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\ServicesMapper" public="false">
+        <service id="webit_shipment_dpd_adapter.services_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\ServicesMapper" public="false">
             <argument type="string">%webit_shipment_dpd_adapter.default_currency%</argument>
         </service>
 
@@ -62,6 +62,7 @@
                     <argument type="string">%webit_shipment_dpd_adapter.auth.fid%</argument>
                 </service>
             </argument>
+            <argument type="string" />
         </service>
     </services>
 </container>

@@ -6,6 +6,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Webit\DPDClient\Client\ClientEnvironments;
 
 class WebitShipmentDpdAdapterExtension extends Extension
 {
@@ -26,5 +27,10 @@ class WebitShipmentDpdAdapterExtension extends Extension
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('adapter.xml');
+
+        if ($config['test_mode']) {
+            $factory = $container->getDefinition('webit_shipment_dpd_adapter.dpd_client');
+            $factory->replaceArgument(1, ClientEnvironments::wsdl(ClientEnvironments::TEST));
+        }
     }
 }

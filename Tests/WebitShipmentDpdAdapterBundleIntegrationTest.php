@@ -76,7 +76,7 @@ webit_shipment_dpd_adapter:
         login: login
         password: password
         fid: fid
-    vendor_class: "Webit\Shipment\Vendor\Vendor"
+    test_mode: true
 YML;
 
         return $yml;
