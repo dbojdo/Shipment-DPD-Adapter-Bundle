@@ -8,6 +8,7 @@
             <argument type="service" id="webit_shipment_dpd_adapter.vendor_factory" />
             <argument type="service" id="webit_shipment_dpd_adapter.tracking_url_provider" />
             <argument type="service" id="webit_shipment_dpd_adapter.open_umlf_mapper" />
+            <argument type="service" id="webit_shipment_dpd_adapter.pickup_sender_provider" />
             <argument type="service" id="webit_shipment_dpd_adapter.dpd_client" />
             <argument type="string">%webit_shipment_dpd_adapter.auth.fid%</argument>
             <argument type="string">%webit_shipment_dpd_adapter.default_language%</argument>
@@ -31,9 +32,12 @@
             <argument type="service" id="webit_shipment.default_sender_address_provider" />
         </service>
 
-        <service id="webit_shipment_dpd_adapter.receiver_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\ReceiverMapper" public="false" />
+        <service id="webit_shipment_dpd_adapter.receiver_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\ReceiverMapper" public="false">
+            <argument type="service" id="webit_shipment_dpd_adapter.mapper.post_code_sanitiser" />
+        </service>
 
         <service id="webit_shipment_dpd_adapter.sender_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\SenderMapper" public="false">
+            <argument type="service" id="webit_shipment_dpd_adapter.mapper.post_code_sanitiser" />
             <argument type="string">%webit_shipment_dpd_adapter.auth.fid%</argument>
         </service>
 
@@ -41,6 +45,17 @@
 
         <service id="webit_shipment_dpd_adapter.services_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\ServicesMapper" public="false">
             <argument type="string">%webit_shipment_dpd_adapter.default_currency%</argument>
+        </service>
+
+        <service id="webit_shipment_dpd_adapter.mapper.post_code_sanitiser" class="Webit\Shipment\DpdAdapter\Mapper\PostCodeSanitiser" public="false" />
+
+        <service id="webit_shipment_dpd_adapter.pickup_sender_mapper" class="Webit\Shipment\DpdAdapter\Mapper\PickupSenderMapper" public="false">
+            <argument type="service" id="webit_shipment_dpd_adapter.mapper.post_code_sanitiser" />
+        </service>
+
+        <service id="webit_shipment_dpd_adapter.pickup_sender_provider" class="Webit\Shipment\DpdAdapter\Mapper\PickupSenderProvider">
+            <argument type="service" id="webit_shipment.default_sender_address_provider" />
+            <argument type="service" id="webit_shipment_dpd_adapter.pickup_sender_mapper" />
         </service>
 
         <service id="webit_shipment_dpd_adapter.tracking_url_provider" alias="webit_shipment_dpd_adapter.tracking_url_provider.by_country" />
