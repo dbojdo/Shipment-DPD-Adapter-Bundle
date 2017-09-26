@@ -9,8 +9,10 @@
             <argument type="service" id="webit_shipment_dpd_adapter.tracking_url_provider" />
             <argument type="service" id="webit_shipment_dpd_adapter.open_umlf_mapper" />
             <argument type="service" id="webit_shipment_dpd_adapter.pickup_sender_provider" />
+            <argument type="service" id="webit_shipment_dpd_adapter.parcel_status_mapper" />
             <argument type="service" id="webit_shipment_dpd_adapter.dpd_client" />
-            <argument type="string">%webit_shipment_dpd_adapter.auth.fid%</argument>
+            <argument type="service" id="webit_shipment_dpd_adapter.dpd_info_client" />
+            <argument type="string">%webit_shipment_dpd_adapter.auth_services.fid%</argument>
             <argument type="string">%webit_shipment_dpd_adapter.default_language%</argument>
 
             <tag name="webit_shipment.vendor_adapter" vendor="dpd" />
@@ -38,7 +40,7 @@
 
         <service id="webit_shipment_dpd_adapter.sender_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\SenderMapper" public="false">
             <argument type="service" id="webit_shipment_dpd_adapter.mapper.post_code_sanitiser" />
-            <argument type="string">%webit_shipment_dpd_adapter.auth.fid%</argument>
+            <argument type="string">%webit_shipment_dpd_adapter.auth_services.fid%</argument>
         </service>
 
         <service id="webit_shipment_dpd_adapter.parcel_mapper" class="Webit\Shipment\DpdAdapter\Mapper\OpenUMLF\ParcelMapper" public="false" />
@@ -58,6 +60,8 @@
             <argument type="service" id="webit_shipment_dpd_adapter.pickup_sender_mapper" />
         </service>
 
+        <service id="webit_shipment_dpd_adapter.parcel_status_mapper" class="Webit\Shipment\DpdAdapter\Mapper\ParcelStatusMapper" />
+
         <service id="webit_shipment_dpd_adapter.tracking_url_provider" alias="webit_shipment_dpd_adapter.tracking_url_provider.by_country" />
         <service id="webit_shipment_dpd_adapter.tracking_url_provider.by_country" class="Webit\Shipment\DpdAdapter\Tracking\ByCountryTrackingUrlProvider" public="false">
             <argument type="collection">
@@ -67,14 +71,27 @@
 
         <service id="webit_shipment_dpd_adapter.tracking_url_provider.pl" class="Webit\Shipment\DpdAdapter\Tracking\PlTrackingUrlProvider" />
 
-        <service id="webit_shipment_dpd_adapter.dpd_client_factory" class="Webit\DPDClient\Client\ClientFactory" />
-        <service id="webit_shipment_dpd_adapter.dpd_client" class="Webit\DPDClient\Client">
+        <service id="webit_shipment_dpd_adapter.dpd_client_factory" class="Webit\DPDClient\DPDServices\Client\ClientFactory" />
+        <service id="webit_shipment_dpd_adapter.dpd_client" class="Webit\DPDClient\DPDServices\Client">
             <factory service="webit_shipment_dpd_adapter.dpd_client_factory" method="create" />
             <argument type="service">
-                <service class="Webit\DPDClient\Common\AuthDataV1">
-                    <argument type="string">%webit_shipment_dpd_adapter.auth.login%</argument>
-                    <argument type="string">%webit_shipment_dpd_adapter.auth.password%</argument>
-                    <argument type="string">%webit_shipment_dpd_adapter.auth.fid%</argument>
+                <service class="Webit\DPDClient\DPDServices\Common\AuthDataV1">
+                    <argument type="string">%webit_shipment_dpd_adapter.auth_services.login%</argument>
+                    <argument type="string">%webit_shipment_dpd_adapter.auth_services.password%</argument>
+                    <argument type="string">%webit_shipment_dpd_adapter.auth_services.fid%</argument>
+                </service>
+            </argument>
+            <argument type="string" />
+        </service>
+
+        <service id="webit_shipment_dpd_adapter.dpd_info_client_factory" class="Webit\DPDClient\DPDInfoServices\Client\ClientFactory" />
+        <service id="webit_shipment_dpd_adapter.dpd_info_client" class="Webit\DPDClient\DPDInfoServices\Client">
+            <factory service="webit_shipment_dpd_adapter.dpd_info_client_factory" method="create" />
+            <argument type="service">
+                <service class="Webit\DPDClient\DPDInfoServices\Common\AuthDataV1">
+                    <argument type="string">%webit_shipment_dpd_adapter.auth_info_services.login%</argument>
+                    <argument type="string">%webit_shipment_dpd_adapter.auth_info_services.password%</argument>
+                    <argument type="string">%webit_shipment_dpd_adapter.auth_info_services.channel%</argument>
                 </service>
             </argument>
             <argument type="string" />

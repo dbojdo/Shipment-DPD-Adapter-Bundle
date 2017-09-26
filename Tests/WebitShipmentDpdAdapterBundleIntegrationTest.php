@@ -72,10 +72,14 @@ webit_shipment:
         delivery_address: "Webit\Bundle\ShipmentDpdAdapter\Tests\Bootstrap\Entity\Address"
         
 webit_shipment_dpd_adapter:
-    auth:
+    auth_services:
         login: login
         password: password
         fid: fid
+    auth_info_services:
+        login: login
+        password: password
+        channel: fid
     test_mode: true
 YML;
 

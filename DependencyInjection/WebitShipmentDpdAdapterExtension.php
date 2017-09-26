@@ -6,7 +6,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Webit\DPDClient\Client\ClientEnvironments;
+use Webit\DPDClient\DPDServices\Client\ClientEnvironments;
 
 class WebitShipmentDpdAdapterExtension extends Extension
 {
@@ -18,9 +18,12 @@ class WebitShipmentDpdAdapterExtension extends Extension
     {
         $config = $this->processConfiguration(new Configuration(), $configs);
 
-        $container->setParameter('webit_shipment_dpd_adapter.auth.login', $config['auth']['login']);
-        $container->setParameter('webit_shipment_dpd_adapter.auth.password', $config['auth']['password']);
-        $container->setParameter('webit_shipment_dpd_adapter.auth.fid', $config['auth']['fid']);
+        $container->setParameter('webit_shipment_dpd_adapter.auth_services.login', $config['auth_services']['login']);
+        $container->setParameter('webit_shipment_dpd_adapter.auth_services.password', $config['auth_services']['password']);
+        $container->setParameter('webit_shipment_dpd_adapter.auth_services.fid', $config['auth_services']['fid']);
+        $container->setParameter('webit_shipment_dpd_adapter.auth_info_services.login', $config['auth_info_services']['login']);
+        $container->setParameter('webit_shipment_dpd_adapter.auth_info_services.password', $config['auth_info_services']['password']);
+        $container->setParameter('webit_shipment_dpd_adapter.auth_info_services.channel', $config['auth_info_services']['channel']);
         $container->setParameter('webit_shipment_dpd_adapter.default_language', $config['default_language']);
         $container->setParameter('webit_shipment_dpd_adapter.default_currency', $config['default_currency']);
         $container->setParameter('webit_shipment_dpd_adapter.vendor_class', $config['vendor_class']);
